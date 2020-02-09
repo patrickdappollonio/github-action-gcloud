@@ -21,7 +21,7 @@ jobs:
           ref: ${{ github.ref }}
           path: gcloud
 
-      - name: Build Docker: Latest tag
+      - name: "Build Docker: Latest tag"
         uses: elgohr/Publish-Docker-Github-Action@master
         if: github.ref == 'refs/heads/master'
         with:
@@ -32,7 +32,7 @@ jobs:
           context: gcloud/
           tags: latest
 
-      - name: Build Docker: Release tag
+      - name: "Build Docker: Release tag"
         uses: elgohr/Publish-Docker-Github-Action@master
         if: github.ref != 'refs/heads/master'
         with:
