@@ -21,11 +21,7 @@ jobs:
           ref: ${{ github.ref }}
           path: gcloud
 
-      - name: Show contents
-        run: ls -lha .
-        working-directory: gcloud
-
-      - name: Build Docker latest
+      - name: "Build Docker: Latest tag"
         uses: elgohr/Publish-Docker-Github-Action@master
         if: github.ref == 'refs/heads/master'
         with:
@@ -36,7 +32,13 @@ jobs:
           context: gcloud/
           tags: latest
 
-      - name: Build Docker Release
+      - name: Get the version
+        id: get_version
+        if: github.ref != 'refs/heads/master'
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: "Build Docker: Release tag"
         uses: elgohr/Publish-Docker-Github-Action@master
         if: github.ref != 'refs/heads/master'
         with:
@@ -45,4 +47,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: gcloud/Dockerfile
           context: gcloud/
-          tags: ${{ github.ref }}
+          tags: ${{ steps.get_version.outputs.VERSION }}
